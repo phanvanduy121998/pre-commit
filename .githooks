@@ -1,20 +1,17 @@
-cat << 'EOF' > .githooks/pre-commit
+@'
 #!/usr/bin/env bash
-
-# Lấy danh sách các file chuẩn bị commit
 staged_files=$(git diff --cached --name-only)
-
-# Kiểm tra xem có file nào chứa từ khóa nhạy cảm không
 for file in $staged_files; do
     if [ -f "$file" ]; then
         if git show ":$file" | grep -qiE "password\s*[:=]|api[-_]?key\s*[:=]"; then
-            echo -e "\n[CẢNH BÁO BẢO MẬT] Phát hiện thông tin nhạy cảm trong file: $file"
-            echo -e "Lệnh commit bị hủy! Vui lòng xóa mật khẩu/API key trước khi commit.\n"
+            echo ""
+            echo "[CANH BAO BAO MAT] Phat hien mat khau/API key trong file: $file"
+            echo "Lenh commit bi huy bo ngay lap tuc!"
+            echo ""
             exit 1
         fi
     fi
 done
-
 exit 0
-EOF
+'@ | Set-Content -Path .githooks\pre-commit -NoNewline
 
